@@ -1,0 +1,119 @@
+<html>
+<head>
+<style type="text/css">
+body,td {font-family:Arial;font-size:16px;}
+a:link {color:#0000ff;}
+a:visited {color:#0000ff;}
+a:active {color:#ff0000;}
+a:hover {color:#ff0000;} 
+</style>
+<script type="text/javascript"
+//
+// *** FIX THE LINE BELOW TO USE YOU GOOGLE MAPS API KEY
+//
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5UMiC4Rgc8UKPJhxRzO7bqSjbOoTPD_c">
+</script>
+<script type="text/javascript">
+//
+// format for the my_locations array is:
+//   
+//  var my_locations =[ 
+//  ["first text string for the tooltip",
+//   "2nd text string for the descriptions below the map", 
+//    marker lat, marker long, "marker letter" , "marker color string in hex"],
+//  [ ... same six items as the previous row for the 2nd location ...],
+//  [ ... same six items as the previous row for the 3rd location ...],
+//  .
+//  .
+//  [ ... same six items as the previous row for the last location ...]
+//  ]; 
+//
+var my_locations =[
+  ["Gundam Front Tokyo",
+   "Gundam Front Tokyo is a theme park based on the popular anime series “Mobile Suit Gundam.” It was opened in 2012 and is located on the seventh floor of a shopping complex, DiverCity Tokyo Plaza in man-made island of Odaiba. While most of the features in the theme park charge admission fee, there are a few sections which are free to access. Outside the DiverCity building, there is a 1/1 scale model of the giant Gundam bot. In the evening, catch a light show on this model with dramatic projection on the backdrop (7:30pm, 8:30pm, 9:30pm for 11 minutes; 8pm & 9pm for 2 minutes). The entrance of the Gundam Front Tokyo features a massive image of Gundam floating in space. And in the Gunpla section, find over 1,000 kinds of Gundam plastic models manufactured since 1980. They now have another life-sized Gundam called the Unicorn Gundam which transforms during the day. ",
+   35.6251216,139.7754499,"G","33FFF3"],
+  ["Pokemon Center Mega Tokyo",
+  "The Pokémon Center Mega Tokyo in Ikebukuro’s Sunshine City shopping centre is the largest Pokémon Center in Japan. This is where Pokémon fans shop for a huge range of merchandise including limited edition items. We stopped by to have a look and to buy souvenirs for some Pokémon obsessed friends back home. There are lots of statue-sized Pokemon. It mostly resembles a Disney store.",
+  35.1945958,135.4106611,"P","F00B0B"],
+  ["Angels Heart",
+   "One of the most famous crepe stands in Harajuku serving a variety of crepes. Angel’s heart claims to be “the oldest crepe shop”, having opened in 1977 (one year after Marion Crepes next door). Either way, at close to 40 years old, this is one long-lasting crepe shop, and I think it would be fair to assume that they know a thing or two about making good crepes.",
+   35.671273,139.7026305,"A","FF31AB"],
+  ["Nissan Engine Museum",
+   "An automobile engine museum run by Nissan Motor Company. The building was accredited as a historical building by the government of Yokohama city in November 2002, and the Nissan Engine Museum was opened officially at the first floor of the building, which had been used as a guest hall, in April 2003. The museum exhibits the latest model car and a memorial car of Nissan brand, 28 Nissan's auto engines, history of Yokohama auto plant and equipment for environmental techniques.",
+   35.4817555,139.5921036,"N","000285"],
+  ["Nismo HQ",
+   "An official tuner for Nissan, the name is derived from Nismo Motorsports. They take Nissan products and modify them with parts in house and make limited editions of existing models. Customers can bring their cars in to have the experts tune them up and buy parts for their cars. ",
+    35.486859,139.6726494,"H","FFFFFF"],
+  ["Tokyo Disneyland",
+    "A different twist on Disneyland than the one in America. The park has seven themed areas: the World Bazaar; the four traditional Disney lands: Adventureland, Westernland, Fantasyland and Tomorrowland; and two mini-lands: Critter Country and Mickey's Toontown. Many of these areas mirror those in the original Disneyland as they are based on American Disney films and fantasies. Fantasyland includes Peter Pan's Flight, Snow White's Scary Adventures, Dumbo the Flying Elephant, based on Disney films and characters. The park is noted for its extensive open spaces, to accommodate the large crowds that visit the park.[1] In 2013, Tokyo Disneyland hosted 17.2 million visitors, making it the world's second-most visited theme park behind the Magic Kingdom at Walt Disney World Resort.",
+    35.6318413,139.8771591,"D","8700FF"],
+  ["Studio Ghibli Museum",
+   "The Ghibli Museum is a museum showcasing the work of the Japanese animation studio Studio Ghibli. It is located in Inokashira Park in Mitaka, a western city of Tokyo, Japan. ",
+    35.696238,139.5704317 ,"S","FF8300"],
+  ["Shikoku",
+   "A serene island of Japan where you can enjoy nature and the rivers while canoeing. I just want to enjoy the natures in the rural areas of Japan and get away from the city. ",
+   33.5559559,132.2638338,"S","32FF00"]
+
+];  
+var image_array= new Array();
+function initialize() {
+// make a table for the text below the map
+  os="<table border='1' ><tr><td colspan='2'><center><b>Some of the places I want to visit in Japan</td></tr>";
+// create the map
+  var map = new google.maps.Map(document.getElementById("map_canvas"));  
+// create the bounds objects (to hold all the lat and lng values to find the extent of the map  
+  var bounds = new google.maps.LatLngBounds();
+// loop through all the locations in the b_locations array   
+  for (i=0; i  < my_locations.length; i++)                               
+       {
+        // create the lat lng object for this location
+           var thisLatLng = new google.maps.LatLng(my_locations[i][2], my_locations[i][3]); 
+        // add the lat/lng for this location to the list of bounds             
+           bounds.extend(thisLatLng);  
+        // create an image array object in the ith location of the image_array            
+           image_array [i]= new Image(); 
+        // specify the marker letter and the color of this location and store the image in an array           
+           image_array[i].src = 'http://www.googlemapsmarkers.com/v1/'+my_locations[i][4]+"/"+my_locations[i][5]+'/'; 
+        // create the marker           /
+           createMarker(i,thisLatLng,map);       
+        // add the data to the table
+        os=os+"<tr><td valign='top'><img src='"+image_array[i].src+"'></td><td><b>"+my_locations[i][0]+"</b><br>"+my_locations[i][1]+"</td></tr>"; 
+       }
+// fit the map to the bounds data
+  map.fitBounds(bounds);
+// end the table and display it in the DIV block with id="sol"
+  sol.innerHTML=os+"</table>";  
+}
+function createMarker(k,theLatLng,map) 
+{
+// this functions gets: k is the index (row) of the location, lat/lng, map object 
+//
+//  *** we use this function so that each marker has its own listener
+//  *** see this: http://stackoverflow.com/questions/15774011/googlemaps-the-addlistener-is-only-working-for-the-last-marker?rq=1
+//
+  var marker = new google.maps.Marker({
+            position: theLatLng,             // sets the lat/lng of the marker
+            map: map,                        // sets the map object
+            icon: image_array[k].src,        // sets the marker image 
+            title: my_locations[k][0]        // gets the tooltip text
+            });
+//
+// *** when the marker is clicked we zoom in and reset the center of the map to the marker co-ordinates
+//
+  google.maps.event.addListener(marker, 'click', function() {  // what to do when the used clicks the marker
+            map.setZoom(16);                                   // zoom to level 16
+            map.setCenter(theLatLng);                          // set the center of the map to the marker location 
+            });
+}
+</script>
+</head>
+<body onload="initialize()">
+
+<!--- the map is define on the page as a DIV block with id="map_canvas" and is 700 by 700 pixels with a black border -->
+<div id="map_canvas" style="border:solid blue;1px;height:700px;width:700px;"></div>
+<p>
+<!--- the table is displayed below the map in a DIV block with id="sol" and is 700 pixels wide with a black border -->
+<div id="sol" style="border:dashed  blue;1px;width:700px;">
+<p>
+</body>
+</html>
